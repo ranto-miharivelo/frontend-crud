@@ -11,26 +11,28 @@
               <p class="text-white-50 mb-4">Please enter your login and password!</p>
 
               <div class="form-outline form-white mb-4">
+                <label class="form-label" for="email">Email</label>
                 <input type="email" id="email" class="form-control" 
                     v-model="user.email"
                     placeholder="Enter email"
                     name="email"
                     required />
-                <label class="form-label" for="email">Email</label>
+               
               </div>
 
               <div class="form-outline form-white mb-4">
+                <label class="form-label" for="password">Password</label>
                 <input type="password" id="password" class="form-control" 
                       v-model="user.password"
                       placeholder="Enter password"
                       name="password"
                       required/>
-                <label class="form-label" for="password">Password</label>
+               
               </div>
 
               <!-- <p class="small mb-3 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p> -->
 
-              <button class="btn btn-outline-light btn-lg px-5" type="submit" @click.prevent="login">Login</button>
+              <button class="btn btn-outline-light btn-lg px-5" type="submit" @click="login">Login</button>
 
             
             </div>

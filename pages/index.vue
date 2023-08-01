@@ -4,18 +4,21 @@
 const { pending, data: stocks,error }:any = useFetch('http://localhost:5000/stocks/list', {
   method:'get'
 })
+console.log(process.env.API_URL)
 
 if(error){
-        console.log(error.value.data);
-        // Might be interesting as well:
-        console.log(error.value.name, error.value.message);
-    }
+    console.log(error.value);
+    // Might be interesting as well:
+}
 
 </script>
 <template>
-  <div class="col-sm-8 container">
-    <div class="col-sm 4 container">
-      <nuxt-link to="/stocks/new"><i class="bi bi-plus"></i>
+  <div class="col-sm-6 container">
+    <div class="col-sm-4 container d-flex justify-content-center mb-3">
+        <h2>Stock list</h2>
+    </div>
+    <div class="col-sm 4 container d-flex justify-content-center mb-3">
+      <nuxt-link to="/stocks/new" class="link-primary link-opacity-25-hover">
             Add stock</nuxt-link>
             
     </div>

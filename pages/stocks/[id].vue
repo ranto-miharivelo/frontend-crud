@@ -6,7 +6,7 @@ import nuxtStorage from 'nuxt-storage'
 
 const { authenticated } = storeToRefs(useAuthStore()); 
 const token = nuxtStorage.localStorage.getData('token');
-
+// adding token to header
 const reqHeaders = {
     Authorization: authenticated ? `Bearer ${token}` : '',
 }
@@ -24,19 +24,24 @@ async function getStockById(id :string){
     })
 
     if(error){
-        console.log(error.value.data);
+        console.log(error.value);
         // Might be interesting as well:
-        console.log(error.value.name, error.value.message);
+
     }
     console.log(stock.value.name)
     product.value.name = stock.value.name
     product.value.quantity = stock.value.quantity
 }
+
 if(id!= "new"){
     await getStockById(id)
+   
 }
 console.log(product)
-
+/// Page title based on edit or create
+const pageTitle = ref('')
+pageTitle.value = id == "new"? "Create":"Edit"
+// upsertStock
 async function upsertStock (){
     let reqBody: any =""
     if(id== "new"){
@@ -61,7 +66,7 @@ async function upsertStock (){
     return navigateTo('/')
 
 }
-
+// deleteStock
 async function deleteStock(){
     const {pending, data: result}: any = await useFetch("http://localhost:5000/stocks/delete",{
         method: 'post',
@@ -75,6 +80,7 @@ async function deleteStock(){
     })
     return navigateTo('/')
 }
+// Cancelling edit
 function cancelEdit(){
     return navigateTo('/')
 }
@@ -82,9 +88,12 @@ function cancelEdit(){
 
 </script>
 <template>
-    <div class="col-sm-6 container">
+    <div class="col-sm-6 container d-flex justify-content-center flex-column align-items-center">
+        <div class="container d-flex justify-content-center flex-column align-items-center">
+            <h2>{{ pageTitle }} Stock</h2>
+        </div>
        
-        <div class="form-outline form-white mb-3 col-sm-6">
+        <div class="form-outline form-white mb-3 col-sm-6  d-flex justify-content-center flex-column">
             <label class="form-label" for="name">Name</label>
             <input type="text" id="name" class="form-control" 
                 v-model="product.name"
@@ -93,7 +102,7 @@ function cancelEdit(){
                 required />
                 
         </div>
-        <div class="form-outline form-white mb-3 col-sm-6">
+        <div class="form-outline form-white mb-3 col-sm-6  d-flex justify-content-center flex-column">
             <label class="form-label" for="quantity">Quantity</label>
             <input type="number" id="quantity" class="form-control" 
                 v-model="product.quantity"
@@ -102,7 +111,7 @@ function cancelEdit(){
                 required />
                 
         </div>
-        <div class="d-flex justify-content-around col-sm-6">
+        <div class="d-flex justify-content-around col-sm-6  d-flex justify-content-between align-items-center">
             
                 <button type="button" class="btn btn-outline-danger" @click="cancelEdit()">Cancel</button>
             

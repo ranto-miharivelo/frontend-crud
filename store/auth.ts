@@ -14,7 +14,7 @@ export const useAuthStore = defineStore('auth', {
   }),
   actions: {
     async authenticateUser({ email, password }: UserPayloadInterface) {
-      const { data, pending }: any = await useFetch('http://localhost:5000/users/login', {
+      const { data, pending,error }: any = await useFetch('http://localhost:5000/users/login', {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         body: {
@@ -22,8 +22,11 @@ export const useAuthStore = defineStore('auth', {
           password,
         },
       });
+      if(error.value){
+        console.log(error.value);
+        // Might be interesting as well:
+      }
       this.loading = pending;
-      console.log(data.value)
       if (data.value) {
         // localStorage.setItem('token', data?.value.token)
         nuxtStorage.localStorage.setData('token', data?.value.token)
@@ -37,7 +40,7 @@ export const useAuthStore = defineStore('auth', {
   // clear the token cookie
     },
     async registerUser({name, email, password}: UserPayloadInterface){
-      const { data, pending }: any = await useFetch('http://localhost:5000/users/register', {
+      const { data, pending,error }: any = await useFetch('http://localhost:5000/users/register', {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         body: {
@@ -46,8 +49,11 @@ export const useAuthStore = defineStore('auth', {
           password,
         },
       });
+      if(error.value){
+        console.log(error.value);
+      }
       this.loading = pending;
-      console.log(data.value)
+    
       
       if (data.value) {
         // localStorage.setItem('token', data?.value.token)

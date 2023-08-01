@@ -78,4 +78,4 @@ const register = async () => {
     router.push('/');
   }
 };
-</script>store/auth
+</script>

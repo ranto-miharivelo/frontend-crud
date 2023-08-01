@@ -25,7 +25,7 @@ export const useAuthStore = defineStore('auth', {
       this.loading = pending;
       console.log(data.value)
       if (data.value) {
-        
+        // localStorage.setItem('token', data?.value.token)
         nuxtStorage.localStorage.setData('token', data?.value.token)
         
         this.authenticated = true; 
@@ -50,7 +50,8 @@ export const useAuthStore = defineStore('auth', {
       console.log(data.value)
       
       if (data.value) {
-        
+        // localStorage.setItem('token', data?.value.token)
+
         nuxtStorage.localStorage.setData('token', data?.value.token)
        
         this.authenticated = true; 

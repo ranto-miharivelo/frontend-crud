@@ -12,6 +12,10 @@ export default defineNuxtConfig({
   css: [
     'bootstrap/dist/css/bootstrap.min.css'
   ],
+  build:{
+    // vue-toastification - old commonjs module 
+    transpile: ['vue-toastification'],
+  },
   ssr:true
   
 })

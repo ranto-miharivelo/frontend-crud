@@ -1,15 +1,18 @@
 
 <script lang="ts" setup>
+import { useToast } from "vue-toastification"
+//init toast
+const toast = useToast()
 
 const { pending, data: stocks,error }:any = useFetch('http://localhost:5000/stocks/list', {
   method:'get'
 })
-console.log(process.env.API_URL)
+if(error.value){
+  toast.warning(error?.value?.data,{timeout:2000})
+  console.log(error?.value?.data);
 
-if(error){
-    console.log(error.value);
-    // Might be interesting as well:
 }
+//console.log(process.env.API_URL)
 
 </script>
 <template>
@@ -43,7 +46,7 @@ if(error){
       </tbody>
     </template>
      
-    <div v-else class="d-flex justify-items-center">
+    <div v-else class="d-flex justify-items-center align-items-center">
       No stocks found
     </div>
   </table>

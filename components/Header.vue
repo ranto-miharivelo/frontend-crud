@@ -19,6 +19,8 @@ import { storeToRefs } from 'pinia';
 import { useAuthStore } from '~/store/auth'; 
 const { logUserOut } = useAuthStore(); // use authenticateUser action from  auth store
 
+const router = useRouter()
+
 const { authenticated } = storeToRefs(useAuthStore());
 
 const logout = () => {

@@ -1,11 +1,14 @@
 import { defineStore } from 'pinia';
 import nuxtStorage from 'nuxt-storage'
+import { useToast } from "vue-toastification"
 
 interface UserPayloadInterface {
   name: string,
   email: string;
   password: string;
 }
+
+const toast = useToast()
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -23,19 +26,21 @@ export const useAuthStore = defineStore('auth', {
         },
       });
       if(error.value){
-        console.log(error.value);
-        // Might be interesting as well:
+        toast.error(error?.value?.data,{timeout:2000})
+        console.log(error?.value?.data);
+        
       }
       this.loading = pending;
       if (data.value) {
         // localStorage.setItem('token', data?.value.token)
+        toast.success("Login successful",{timeout:1000})
         nuxtStorage.localStorage.setData('token', data?.value.token)
         
         this.authenticated = true; 
       }
     },
     logUserOut() {
-      nuxtStorage.localStorage.removeItem('token'); // useCookie new hook in nuxt 3
+      nuxtStorage.localStorage.removeItem('token'); 
       this.authenticated = false; // set authenticated  state value to false
   // clear the token cookie
     },
@@ -50,14 +55,15 @@ export const useAuthStore = defineStore('auth', {
         },
       });
       if(error.value){
-        console.log(error.value);
+        toast.error(error?.value?.data,{timeout:2000})
+        console.log(error?.value?.data);
       }
       this.loading = pending;
     
       
       if (data.value) {
         // localStorage.setItem('token', data?.value.token)
-
+        toast.success("Register successful",{timeout:1000})
         nuxtStorage.localStorage.setData('token', data?.value.token)
        
         this.authenticated = true; 

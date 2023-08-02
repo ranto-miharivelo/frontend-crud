@@ -2,6 +2,9 @@
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "../../store/auth";
 import nuxtStorage from 'nuxt-storage'
+import { useToast } from "vue-toastification"
+//init toast
+const toast = useToast()
 
 
 const { authenticated } = storeToRefs(useAuthStore()); 
@@ -22,21 +25,17 @@ async function getStockById(id :string){
         method: 'get',
        
     })
-
-    if(error){
-        console.log(error.value);
-        // Might be interesting as well:
-
-    }
+    // displaying error on toast
     console.log(stock.value.name)
     product.value.name = stock.value.name
     product.value.quantity = stock.value.quantity
 }
 
+/// Updating if id is not new
 if(id!= "new"){
     await getStockById(id)
-   
 }
+
 console.log(product)
 /// Page title based on edit or create
 const pageTitle = ref('')
@@ -57,18 +56,26 @@ async function upsertStock (){
             quantity: product.value.quantity
         }
     }
-    const {pending, data: result}: any = await useFetch("http://localhost:5000/stocks/upsert",{
+    const {pending, data: result, error}: any = await useFetch("http://localhost:5000/stocks/upsert",{
         method: 'post',
         headers: reqHeaders,
         body:reqBody
        
     })
+    if(error.value){
+        toast.error(error?.value?.data,{timeout:2000})
+        console.log(error.value);
+
+    }
+    else{
+        toast.success("Stock inserted successfully",{timeout:1000})
+    }
     return navigateTo('/')
 
 }
 // deleteStock
 async function deleteStock(){
-    const {pending, data: result}: any = await useFetch("http://localhost:5000/stocks/delete",{
+    const {pending, data: result, error}: any = await useFetch("http://localhost:5000/stocks/delete",{
         method: 'post',
         headers: reqHeaders,
         body:{
@@ -78,6 +85,14 @@ async function deleteStock(){
         }
        
     })
+    if(error.value){
+        toast.error(error?.value?.data),{timeout:2000}
+        console.log(error.value);
+
+    }
+    else{
+        toast.success("Stock deleted successfully",{timeout:1000})
+    }
     return navigateTo('/')
 }
 // Cancelling edit
@@ -91,6 +106,11 @@ function cancelEdit(){
     <div class="col-sm-6 container d-flex justify-content-center flex-column align-items-center">
         <div class="container d-flex justify-content-center flex-column align-items-center">
             <h2>{{ pageTitle }} Stock</h2>
+        </div>
+        <div class="container d-flex justify-content-center flex-column align-items-center">
+            <p>On creation, if stock's name already exists in database,
+                it wil be updated, not created
+            </p>
         </div>
        
         <div class="form-outline form-white mb-3 col-sm-6  d-flex justify-content-center flex-column">
